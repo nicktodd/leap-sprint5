@@ -4,9 +4,9 @@
 
 By the end of this lab you will have:
 
+- Applied encapsulation as a design decision that protects an actual invariant
 - Used inheritance from an abstract class, and implemented an interface
 - Recognised a genuine bad-inheritance anti-pattern and fixed it using composition
-- Applied encapsulation as a design decision that protects an actual invariant
 
 ## Setup
 
@@ -15,24 +15,24 @@ By the end of this lab you will have:
 
 ## Task
 
-### Kata A — `BondInstrument` and `CryptoInstrument` (inheritance from an abstract class)
+### Kata A — `Holding` (encapsulation as a design decision)
 
-Both extend the given `Instrument` abstract class (which implements `Feeable` — see Kata D).
-
-- `BondInstrument.calculateFee(tradeValue)` — a flat $5.00 fee, regardless of trade size.
-- `CryptoInstrument.calculateFee(tradeValue)` — 0.5% of trade value, with a $1.00 minimum
-  (i.e. never charge less than $1.00, even on a tiny trade).
-
-### Kata B — `Holding` (encapsulation as a design decision)
-
-`HoldingStarter.java` shows the bad version (a public, unvalidated field) — read it, but don't
-modify it. Instead, complete `Holding.java`:
+The simplest kata — start here. `HoldingStarter.java` shows the bad version (a public,
+unvalidated field) — read it, but don't modify it. Instead, complete `Holding.java`:
 
 - The quantity field must be **private**.
 - The constructor accepts an initial quantity; throws `IllegalArgumentException` if negative.
 - `getQuantity()` returns the current quantity.
 - `adjust(double delta)` applies `delta`; throws `IllegalArgumentException` (without changing
   state) if the result would go negative.
+
+### Kata B — `BondInstrument` and `CryptoInstrument` (inheritance from an abstract class)
+
+Both extend the given `Instrument` abstract class (which implements `Feeable` — see Kata D).
+
+- `BondInstrument.calculateFee(tradeValue)` — a flat $5.00 fee, regardless of trade size.
+- `CryptoInstrument.calculateFee(tradeValue)` — 0.5% of trade value, with a $1.00 minimum
+  (i.e. never charge less than $1.00, even on a tiny trade).
 
 ### Kata C — `GoodClientRegistry` (recognising and fixing bad inheritance)
 

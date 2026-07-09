@@ -19,10 +19,31 @@ public class OODemo {
         // Python equivalent: class Trade: ...  then t1 = Trade(...); t2 = Trade(...)
         // - identical idea, Java just requires "new" explicitly every time.
 
-        // --- Part 1: inheriting from a CONCRETE class, and the problem with it ---
+        // --- Part 1: encapsulation as a design decision ---
+        // The simplest of today's ideas: one object, protecting its own data.
+        // No inheritance, no interfaces, nothing else involved yet.
+        Holding holding = new Holding(100);
+        holding.adjust(-30);
+        System.out.println("\nHolding quantity after sell: " + holding.getQuantity());
+        try {
+            holding.adjust(-1000);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Rejected: " + e.getMessage());
+        }
+
+        // --- Part 2: a straightforward inheritance example ---
+        // Before anything goes wrong: PremiumInstrumentV1 extends ConcreteInstrument,
+        // deliberately overriding calculateFee() with its own logic, while getTicker()
+        // is inherited completely unchanged - it's never redefined, extends already
+        // gives PremiumInstrumentV1 that method for free.
+        PremiumInstrumentV1 premium = new PremiumInstrumentV1("VOD.L");
+        double tradeValue = 10000.0;
+        System.out.println("\n" + premium.getTicker() + " (inherited method) premium fee "
+                + "(overridden method): " + premium.calculateFee(tradeValue));
+
+        // --- Part 3: the same mechanism, but a subclass that DOESN'T override ---
         ConcreteInstrument equityV1 = new EquityInstrumentV1("AAPL");
         ConcreteInstrument bondBuggy = new BondInstrumentBuggy("GILT10");
-        double tradeValue = 10000.0;
         System.out.println("\nEquityInstrumentV1 fee (correct by coincidence): "
                 + equityV1.calculateFee(tradeValue));
         System.out.println("BondInstrumentBuggy fee (SHOULD be a flat $5.00): "
@@ -30,19 +51,19 @@ public class OODemo {
         // Nothing here failed to compile. The bug is real, and invisible until
         // someone notices the number is wrong in production.
 
-        // --- Part 2: the fix - an ABSTRACT class ---
+        // --- Part 4: the fix - an ABSTRACT class ---
         // Instrument.java is now abstract, with calculateFee() having no body at
         // all. Try (mentally, don't uncomment) writing:
         //     class BrokenInstrument extends Instrument { }
         // - it will not compile. "class BrokenInstrument must implement the
-        // inherited abstract method Instrument.calculateFee". The Step 1 bug is
+        // inherited abstract method Instrument.calculateFee". The Step 3 bug is
         // now a compiler error, not a silent mistake.
         Instrument equity = new EquityInstrument("AAPL");
         Instrument bond = new BondInstrument("GILT10");
         System.out.println("\nEquityInstrument fee: " + equity.calculateFee(tradeValue));
         System.out.println("BondInstrument fee: " + bond.calculateFee(tradeValue));
 
-        // --- Part 3: interfaces - a capability, not a hierarchy ---
+        // --- Part 5: interfaces - a capability, not a hierarchy ---
         // AccountMaintenanceCharge has nothing to do with Instrument - no ticker,
         // not a tradable thing at all - but it still implements Feeable, because
         // it can still calculate a fee.
@@ -50,7 +71,7 @@ public class OODemo {
         System.out.println("\nAccountMaintenanceCharge fee: "
                 + maintenanceCharge.calculateFee(0.0));
 
-        // --- Part 4: polymorphism across the interface, not just the class hierarchy ---
+        // --- Part 6: polymorphism across the interface, not just the class hierarchy ---
         // A List<Feeable> can hold BOTH Instruments (which implement Feeable
         // indirectly, via the abstract class) AND AccountMaintenanceCharge (which
         // implements it directly) - genuinely unrelated classes, united only by
@@ -62,17 +83,7 @@ public class OODemo {
         }
         System.out.println("Total fees across unrelated Feeable things: " + totalFees);
 
-        // --- Part 5: encapsulation as a design decision ---
-        Holding holding = new Holding(100);
-        holding.adjust(-30);
-        System.out.println("\nHolding quantity after sell: " + holding.getQuantity());
-        try {
-            holding.adjust(-1000);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Rejected: " + e.getMessage());
-        }
-
-        // --- Part 6: recognising bad inheritance ---
+        // --- Part 7: recognising bad inheritance ---
         BadClientRegistry registry = new BadClientRegistry();
         registry.add("C001");
         registry.add("C001"); // ArrayList allows the duplicate - the registry

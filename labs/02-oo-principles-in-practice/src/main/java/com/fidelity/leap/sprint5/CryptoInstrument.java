@@ -1,6 +1,6 @@
 package com.fidelity.leap.sprint5;
 
-// Kata A.2: implement Crypto's fee structure - 0.5% of trade value, with a $1.00
+// Kata B.2: implement Crypto's fee structure - 0.5% of trade value, with a $1.00
 // minimum fee (crypto exchanges typically charge a higher rate than equities, with
 // a floor so tiny trades aren't effectively fee-free).
 public class CryptoInstrument extends Instrument {

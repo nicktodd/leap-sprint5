@@ -1,6 +1,6 @@
 package com.fidelity.leap.sprint5;
 
-// Kata A.1: implement a Bond's fee structure - a flat $5.00 fee, regardless of
+// Kata B.1: implement a Bond's fee structure - a flat $5.00 fee, regardless of
 // trade size (bonds are typically fee-flat, unlike equities).
 public class BondInstrument extends Instrument {
 

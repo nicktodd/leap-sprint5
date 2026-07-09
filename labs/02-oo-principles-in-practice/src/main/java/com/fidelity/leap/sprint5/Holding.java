@@ -1,6 +1,6 @@
 package com.fidelity.leap.sprint5;
 
-// Kata B: fix HoldingStarter's public-field problem here, properly.
+// Kata A: fix HoldingStarter's public-field problem here, properly.
 // TODO:
 // - quantity must be a PRIVATE field.
 // - Constructor: accept an initial quantity; throw IllegalArgumentException if it's negative.

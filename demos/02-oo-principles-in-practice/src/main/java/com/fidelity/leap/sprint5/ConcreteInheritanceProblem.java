@@ -27,6 +27,24 @@ class ConcreteInstrument {
     }
 }
 
+// A STRAIGHTFORWARD example of inheritance working exactly as intended - shown
+// first, before anything goes wrong. PremiumInstrumentV1 deliberately overrides
+// calculateFee() with its own logic (a higher, 1% "premium" rate), while
+// inheriting getTicker() completely unchanged - it never redefines getTicker(),
+// it doesn't need to, extends ConcreteInstrument means it already has it.
+class PremiumInstrumentV1 extends ConcreteInstrument {
+
+    PremiumInstrumentV1(String ticker) {
+        super(ticker); // calls ConcreteInstrument's constructor to set up the
+                         // inherited ticker field
+    }
+
+    @Override
+    double calculateFee(double tradeValue) {
+        return tradeValue * 0.01; // 1% - genuinely different from the 0.1% default
+    }
+}
+
 // This override happens to be correct for an equity's fee.
 class EquityInstrumentV1 extends ConcreteInstrument {
     EquityInstrumentV1(String ticker) {
