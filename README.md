@@ -32,6 +32,7 @@ self-contained Maven projects (`pom.xml` in each), runnable independently:
 | # | Module | Lab |
 |---|---|---|
 | 1 | Core Java Refresher | [labs/01-core-java-refresher/README.md](labs/01-core-java-refresher/README.md) |
+| 2 | Object-Oriented Principles in Practice | [labs/02-oo-principles-in-practice/README.md](labs/02-oo-principles-in-practice/README.md) |
 
 ## Getting started
 

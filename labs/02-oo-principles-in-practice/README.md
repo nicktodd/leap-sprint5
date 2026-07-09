@@ -1,0 +1,63 @@
+# Module 2 Lab — Object-Oriented Principles in Practice
+
+## Objectives
+
+By the end of this lab you will have:
+
+- Used polymorphism and inheritance correctly, extending an abstract base class
+- Recognised a genuine bad-inheritance anti-pattern and fixed it using composition
+- Applied encapsulation as a design decision that protects an actual invariant
+
+## Setup
+
+- Java 21 and Maven installed
+- `mvn test` runs the pre-written test suite in `src/test/java` against your implementation
+
+## Task
+
+### Kata A — `BondInstrument` and `CryptoInstrument` (polymorphism & good inheritance)
+
+Both extend the given `Instrument` abstract class.
+
+- `BondInstrument.calculateFee(tradeValue)` — a flat $5.00 fee, regardless of trade size.
+- `CryptoInstrument.calculateFee(tradeValue)` — 0.5% of trade value, with a $1.00 minimum
+  (i.e. never charge less than $1.00, even on a tiny trade).
+
+### Kata B — `Holding` (encapsulation as a design decision)
+
+`HoldingStarter.java` shows the bad version (a public, unvalidated field) — read it, but don't
+modify it. Instead, complete `Holding.java`:
+
+- The quantity field must be **private**.
+- The constructor accepts an initial quantity; throws `IllegalArgumentException` if negative.
+- `getQuantity()` returns the current quantity.
+- `adjust(double delta)` applies `delta`; throws `IllegalArgumentException` (without changing
+  state) if the result would go negative.
+
+### Kata C — `GoodClientRegistry` (recognising and fixing bad inheritance)
+
+`BadClientRegistry.java` shows the bad version (`extends ArrayList<String>`) — read it, but
+don't modify it. Instead, complete `GoodClientRegistry.java` using **composition**: it must hold
+an internal list privately, and must not extend or implement any collection type itself.
+
+- `addClient(String clientId)` — adds the ID; throws `IllegalArgumentException` if already present.
+- `contains(String clientId)` — returns whether the ID is registered.
+- `size()` — returns the number of registered clients.
+
+## Running the tests
+
+```bash
+mvn test
+```
+
+All 12 tests should pass. One of them (`doesNotExtendAnyCollectionType`) checks your class
+hierarchy directly via reflection — this is the automated version of "did you actually use
+composition, not inheritance."
+
+## Acceptance criteria
+
+- `mvn test` passes with 0 failures and 0 errors.
+- `Holding`'s field is private (verified by the test suite via reflection).
+- `GoodClientRegistry` does not extend or implement any `Collection` type.
+- Neither `HoldingStarter.java` nor `BadClientRegistry.java` has been modified — they exist only
+  to show you the "before."
