@@ -1,6 +1,6 @@
 # Module 2 Lab — Model Answer Notes
 
-See `src/main/java/com/fidelity/leap/sprint5/`. Verified: `mvn test` passes all 12 tests.
+See `src/main/java/com/fidelity/leap/sprint5/`. Verified: `mvn test` passes all 16 tests.
 
 Key points to check in a delegate's solution:
 
@@ -19,3 +19,8 @@ Key points to check in a delegate's solution:
   exists specifically to catch this half-fix.
 - **`addClient`'s duplicate check happens before adding**, not by checking `size()` afterwards or
   similar — straightforward, but worth confirming a delegate didn't invert the logic.
+- **`AnnualServiceFee` must implement `Feeable` directly, with no relationship to `Instrument`
+  whatsoever.** A delegate who makes it `extends Instrument` (perhaps to reuse `getTicker()`, or
+  out of habit from Kata A) has recreated exactly the reuse-only-inheritance mistake
+  `BadClientRegistry` was meant to teach against — the `doesNotExtendInstrument` reflection test
+  exists specifically to catch this.

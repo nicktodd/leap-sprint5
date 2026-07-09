@@ -6,46 +6,77 @@ public class OODemo {
 
     public static void main(String[] args) {
 
-        // --- Part 1: polymorphism and (good) inheritance ---
-        // The variable's declared type is Instrument (the abstract base) - but the
-        // actual object at runtime is an EquityInstrument or a FundInstrument.
-        // Calling calculateFee() runs whichever subclass's version actually applies,
-        // decided at runtime based on the real object, not the declared type. This
-        // is polymorphism: one method call, different behaviour per concrete type.
-        List<Instrument> instruments = List.of(
-                new EquityInstrument("AAPL"),
-                new FundInstrument("GLBEQ1")
-        );
+        // --- Part 0: class vs. object ---
+        // Trade (from Module 1) is a CLASS: a blueprint. It has no data of its own
+        // until something builds an OBJECT from it with "new". Every "new Trade(...)"
+        // call creates a separate, independent object - changing one never affects
+        // another, even though both were built from the exact same class.
+        Trade tradeOne = new Trade("T0001", "Alice Chen", "AAPL", 120, 185.32, "BUY");
+        Trade tradeTwo = new Trade("T0002", "Ben Whitfield", "MSFT", 60, 402.11, "BUY");
+        System.out.println("Two objects, one class: " + tradeOne + " | " + tradeTwo);
+        System.out.println("Same class? " + (tradeOne.getClass() == tradeTwo.getClass()));
+        System.out.println("Same object? " + (tradeOne == tradeTwo));
+        // Python equivalent: class Trade: ...  then t1 = Trade(...); t2 = Trade(...)
+        // - identical idea, Java just requires "new" explicitly every time.
 
+        // --- Part 1: inheriting from a CONCRETE class, and the problem with it ---
+        ConcreteInstrument equityV1 = new EquityInstrumentV1("AAPL");
+        ConcreteInstrument bondBuggy = new BondInstrumentBuggy("GILT10");
         double tradeValue = 10000.0;
-        for (Instrument instrument : instruments) {
-            double fee = instrument.calculateFee(tradeValue);
-            System.out.println(instrument.getTicker() + ": fee = " + fee);
+        System.out.println("\nEquityInstrumentV1 fee (correct by coincidence): "
+                + equityV1.calculateFee(tradeValue));
+        System.out.println("BondInstrumentBuggy fee (SHOULD be a flat $5.00): "
+                + bondBuggy.calculateFee(tradeValue) + "  <- silently wrong");
+        // Nothing here failed to compile. The bug is real, and invisible until
+        // someone notices the number is wrong in production.
+
+        // --- Part 2: the fix - an ABSTRACT class ---
+        // Instrument.java is now abstract, with calculateFee() having no body at
+        // all. Try (mentally, don't uncomment) writing:
+        //     class BrokenInstrument extends Instrument { }
+        // - it will not compile. "class BrokenInstrument must implement the
+        // inherited abstract method Instrument.calculateFee". The Step 1 bug is
+        // now a compiler error, not a silent mistake.
+        Instrument equity = new EquityInstrument("AAPL");
+        Instrument bond = new BondInstrument("GILT10");
+        System.out.println("\nEquityInstrument fee: " + equity.calculateFee(tradeValue));
+        System.out.println("BondInstrument fee: " + bond.calculateFee(tradeValue));
+
+        // --- Part 3: interfaces - a capability, not a hierarchy ---
+        // AccountMaintenanceCharge has nothing to do with Instrument - no ticker,
+        // not a tradable thing at all - but it still implements Feeable, because
+        // it can still calculate a fee.
+        Feeable maintenanceCharge = new AccountMaintenanceCharge("ACC-001");
+        System.out.println("\nAccountMaintenanceCharge fee: "
+                + maintenanceCharge.calculateFee(0.0));
+
+        // --- Part 4: polymorphism across the interface, not just the class hierarchy ---
+        // A List<Feeable> can hold BOTH Instruments (which implement Feeable
+        // indirectly, via the abstract class) AND AccountMaintenanceCharge (which
+        // implements it directly) - genuinely unrelated classes, united only by
+        // the one capability they share.
+        List<Feeable> feeableThings = List.of(equity, bond, maintenanceCharge);
+        double totalFees = 0.0;
+        for (Feeable feeable : feeableThings) {
+            totalFees += feeable.calculateFee(tradeValue);
         }
-        // Note: this loop has NO if/else checking "is this an Equity or a Fund?"
-        // Adding a third Instrument subclass later requires zero changes here -
-        // that's the payoff of designing the hierarchy this way.
+        System.out.println("Total fees across unrelated Feeable things: " + totalFees);
 
-        // --- Part 2: encapsulation as a design decision ---
+        // --- Part 5: encapsulation as a design decision ---
         Holding holding = new Holding(100);
-        holding.adjust(-30); // sell 30 units
-        System.out.println("Holding quantity after sell: " + holding.getQuantity());
-
+        holding.adjust(-30);
+        System.out.println("\nHolding quantity after sell: " + holding.getQuantity());
         try {
-            holding.adjust(-1000); // would go negative
+            holding.adjust(-1000);
         } catch (IllegalArgumentException e) {
             System.out.println("Rejected: " + e.getMessage());
         }
 
-        // --- Part 3: recognising bad inheritance ---
-        // BadClientRegistry extends ArrayList<String> - narrate, don't run this
-        // part live in a way that demonstrates "good" behaviour, since the whole
-        // point is that it's a trap:
+        // --- Part 6: recognising bad inheritance ---
         BadClientRegistry registry = new BadClientRegistry();
         registry.add("C001");
-        registry.add("C001"); // ArrayList happily allows a duplicate - the
-                                // registry has no way to prevent this, because it
-                                // never got the chance to define its own rules.
-        System.out.println("Registry (should never have allowed a duplicate): " + registry);
+        registry.add("C001"); // ArrayList allows the duplicate - the registry
+                                // never got the chance to define its own rule.
+        System.out.println("\nRegistry (should never have allowed a duplicate): " + registry);
     }
 }

@@ -1,69 +1,111 @@
 # Demo: Module 2 — Object-Oriented Principles in Practice
 
-**Duration:** 20 minutes
-**Files:** `OODemo.java`, `Instrument.java`, `EquityInstrument.java`, `FundInstrument.java`,
-`Holding.java`, `BadClientRegistry.java`
+**Duration:** 26 minutes
+**Files:** `OODemo.java`, `Trade.java`, `ConcreteInheritanceProblem.java`, `Instrument.java`,
+`BondInstrument.java`, `EquityInstrument.java`, `FundInstrument.java`, `Feeable.java`,
+`AccountMaintenanceCharge.java`, `Holding.java`, `BadClientRegistry.java`
 
-## Part 1: Polymorphism and inheritance, done well (7 min)
+Every code example referenced in this guide is shown **before** it's discussed, in the same
+order `OODemo.java` runs them — nothing here refers to code the room hasn't seen yet.
 
-Show `Instrument.java`: an `abstract class` with a `ticker` field (real, shared state) and an
-`abstract` method `calculateFee(double)` with no body. Narration: `abstract` means this class
-can never be instantiated directly — it exists purely to be extended, and it *requires* every
-subclass to supply its own `calculateFee`, since the fee genuinely differs per asset class.
+## Part 0: Class vs. object (4 min)
 
-Show `EquityInstrument` (percentage fee) and `FundInstrument` (flat fee) — two real, different
-implementations of the same method signature.
-
-Run the loop in `OODemo.java`:
+Show `Trade` (from Module 1) and the first lines of `OODemo.java`:
 
 ```java
-List<Instrument> instruments = List.of(new EquityInstrument("AAPL"), new FundInstrument("GLBEQ1"));
-for (Instrument instrument : instruments) {
-    double fee = instrument.calculateFee(tradeValue);
+Trade tradeOne = new Trade("T0001", "Alice Chen", "AAPL", 120, 185.32, "BUY");
+Trade tradeTwo = new Trade("T0002", "Ben Whitfield", "MSFT", 60, 402.11, "BUY");
+```
+
+Narration: `Trade` (the `.java` file, the `class` keyword) is a **blueprint** — it has no data
+of its own. Each `new Trade(...)` call builds a separate **object**: a real, independent thing in
+memory, with its own copy of every field. Run the demo's own check:
+
+```java
+System.out.println("Same class? " + (tradeOne.getClass() == tradeTwo.getClass())); // true
+System.out.println("Same object? " + (tradeOne == tradeTwo));                       // false
+```
+
+Narration: same *class*, two different *objects* — changing `tradeOne`'s quantity would never
+affect `tradeTwo`. Python equivalent: `class Trade: ...` then `t1 = Trade(...)`, `t2 = Trade(...)`
+— identical idea, Java just always requires the explicit `new`.
+
+## Part 1: Inheriting from a concrete class — and its problem (5 min)
+
+Show `ConcreteInstrument` in `ConcreteInheritanceProblem.java`: a normal, instantiable class with
+a real, working `calculateFee()` that returns a 0.1% default. Show `EquityInstrumentV1 extends
+ConcreteInstrument` — no override, and it happens to be correct, since 0.1% is right for an
+equity.
+
+Now show `BondInstrumentBuggy extends ConcreteInstrument` — also no override. Run the demo:
+
+```
+EquityInstrumentV1 fee (correct by coincidence): 10.0
+BondInstrumentBuggy fee (SHOULD be a flat $5.00): 10.0  <- silently wrong
+```
+
+Narration: bonds should charge a flat $5.00, not a percentage — whoever wrote
+`BondInstrumentBuggy` forgot to override `calculateFee()`, and the compiler said nothing, because
+the inherited method is a real, callable one. This bug is invisible until someone notices the
+number is wrong, possibly in production.
+
+## Part 2: The fix — an abstract class (5 min)
+
+Show `Instrument.java`: `public abstract class Instrument`, with `calculateFee()` having **no
+body at all**. Narration: `abstract` means two things — the class itself can never be
+instantiated directly (`new Instrument("AAPL")` is a compile error), and any subclass that
+doesn't override `calculateFee()` **will not compile**. Show `BondInstrument.java` — the
+corrected version — and narrate: the Step 1 bug is now a compiler error, not a silent mistake,
+if you deleted this method the whole project would refuse to build.
+
+Run the demo's output for both `EquityInstrument` and the corrected `BondInstrument` (5.0, not
+10.0) to show the fix landing.
+
+## Part 3: Interfaces — a capability, not a hierarchy (6 min)
+
+Show `Feeable.java`: `public interface Feeable { double calculateFee(double tradeValue); }`.
+Narration: an interface is a pure contract — a method signature, no body, no state at all, not
+even a private field. `Instrument implements Feeable` (point back at `Instrument.java`'s class
+declaration).
+
+Now show `AccountMaintenanceCharge.java`: `implements Feeable`, but does **not** extend
+`Instrument` at all — no ticker, no trade-related state, nothing in common with the `Instrument`
+hierarchy. Narration: this is exactly the problem abstract classes alone can't solve. Forcing
+`AccountMaintenanceCharge` into the `Instrument` hierarchy just to reuse `calculateFee()` would
+be precisely the reuse-only inheritance mistake Part 6 warns about. A class can `extend` only one
+other class, but can `implement` as many interfaces as it genuinely needs.
+
+## Part 4: Polymorphism across the interface (3 min)
+
+```java
+List<Feeable> feeableThings = List.of(equity, bond, maintenanceCharge);
+for (Feeable feeable : feeableThings) {
+    totalFees += feeable.calculateFee(tradeValue);
 }
 ```
 
-Narration: the loop variable's *declared* type is `Instrument`, but the *actual* object at
-runtime is an `EquityInstrument` or a `FundInstrument`. Calling `calculateFee()` runs whichever
-subclass's version genuinely applies — decided at runtime, based on the real object. That's
-polymorphism. Point out what's *not* here: no `if (instrument instanceof EquityInstrument)`
-anywhere. Adding a third `Instrument` subclass later needs zero changes to this loop — that's the
-actual payoff of designing the hierarchy this way, not just a syntax curiosity.
+Narration: this list holds genuinely unrelated classes — two `Instrument` subclasses and one
+completely unrelated `AccountMaintenanceCharge` — united only by the one capability they share.
+Polymorphism isn't limited to a class hierarchy; it works through an interface exactly the same
+way.
 
-## Part 2: Encapsulation as a design decision (5 min)
+## Part 5: Encapsulation as a design decision (4 min)
 
-Show `Holding.java`. Narration: the `quantity` field is `private` for a specific reason, not out
-of habit — this class has an invariant (quantity can never go negative) that needs protecting.
-If `quantity` were a public field, *every* piece of code anywhere that touches a `Holding` would
-individually have to remember that rule; one careless line, anywhere, breaks it silently.
+Show `Holding.java`. Narration: `quantity` is `private` for a specific reason — this class has an
+invariant (quantity can never go negative) that needs protecting. Run the demo's valid `adjust()`
+call, then the rejected one. `adjust()` is the *only* way to change `quantity`, and it enforces
+the rule every time, in exactly one place — not because every caller remembers to check.
 
-Run the demo's `adjust()` calls — a valid sell, then an invalid one that would go negative.
-Point out `adjust()` is the *only* way to change `quantity`, and it enforces the rule every
-single time, in exactly one place.
+## Part 6: Recognising bad inheritance (3 min)
 
-Show the commented-out `BadHolding` example at the bottom of the file — a public field version —
-and ask the room: what stops someone setting `quantity = -500` directly? Nothing. That's the
-actual cost of skipping encapsulation, made concrete.
-
-## Part 3: Recognising bad inheritance (6 min)
-
-Show `BadClientRegistry extends ArrayList<String>`. Narration: this is a real, common mistake —
-extending `ArrayList` gives you `add()`, `get()`, `size()`, iteration, "for free." But a client
-registry is not an `ArrayList` — there's no genuine "is-a" relationship, only a desire to reuse
-storage code.
-
-Run the demo: add `"C001"` twice — `ArrayList` happily allows the duplicate, because
-`BadClientRegistry` never got the chance to define its own rule against it. Every `ArrayList`
-method (`remove(int)`, `set(int, T)`, `sort(...)`) is now part of this class's public interface
-too, whether that was intended or not.
-
-Narration: the fix is **composition, not inheritance** — a registry that *has* an internal list,
-wrapped behind a small interface it fully controls, rather than *is* an `ArrayList` with every
-`ArrayList` method along for the ride. The lab has you build this fix yourself.
+Show `BadClientRegistry extends ArrayList<String>`. Run the demo: adding `"C001"` twice succeeds
+— `ArrayList` allows the duplicate, because `BadClientRegistry` never got the chance to define
+its own rule. Narration: the fix is composition, not inheritance — the lab has you build it.
 
 ## Key message
 
-Inheritance and polymorphism are powerful when a genuine "is-a" relationship exists and subclasses
-truly share behaviour worth centralising. Reaching for inheritance just to reuse code, without
-that "is-a" relationship, creates a class with no control over its own interface. Encapsulation
-isn't a style preference — it's how a class protects an invariant it's actually responsible for.
+Concrete inheritance works, but nothing stops a subclass from silently forgetting to override
+something it should. Abstract classes turn that silent mistake into a compiler error. Interfaces
+solve a different problem entirely: a capability shared across classes that aren't related by
+inheritance at all. All three — concrete, abstract, and interface — are real tools, each suited to
+a different situation, not a strict "always prefer the newest one" ladder.
