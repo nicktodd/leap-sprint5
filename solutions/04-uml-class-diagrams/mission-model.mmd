@@ -55,8 +55,8 @@ classDiagram
     }
 
     Client "1" --> "1" Portfolio : has
-    Portfolio "1" --> "*" Holding : has many
-    Holding "*" --> "1" Instrument : refers to
+    Portfolio "1" *-- "*" Holding : composition - a Holding is meaningless without its Portfolio
+    Holding "*" o-- "1" Instrument : aggregation - an Instrument exists in the market regardless
     Order "*" --> "1" Client : refers to
     Order "*" --> "1" Instrument : refers to
     Instrument ..|> Feeable : implements

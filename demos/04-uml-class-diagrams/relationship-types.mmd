@@ -1,0 +1,20 @@
+classDiagram
+    class Order1["Order"]
+    class Client1["Client"]
+    Order1 --> Client1 : association
+
+    class Portfolio2["Portfolio"]
+    class Instrument2["Instrument"]
+    Portfolio2 o-- Instrument2 : aggregation
+
+    class Portfolio3["Portfolio"]
+    class Holding3["Holding"]
+    Portfolio3 *-- Holding3 : composition
+
+    class BondInstrument4["BondInstrument"]
+    class Instrument4["Instrument"]
+    BondInstrument4 --|> Instrument4 : inheritance
+
+    class Instrument5["Instrument"]
+    class Feeable5["Feeable"]
+    Instrument5 ..|> Feeable5 : implements

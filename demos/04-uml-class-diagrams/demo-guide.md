@@ -22,6 +22,8 @@ worksheet:
 2. **Relationships next** — this is where UML notation adds precision that the informal
    Module 3 sketch didn't have:
    - `-->` = association ("has a reference to")
+   - `o--` = aggregation ("has a", but the part can outlive the whole)
+   - `*--` = composition ("has a", and the part cannot exist without the whole)
    - `..>` = dependency (uses it, but doesn't hold a permanent reference)
    - `--|>` = inheritance ("is a")
    - `..|>` = interface realization ("implements")
@@ -30,8 +32,25 @@ worksheet:
 
 3. **Render it**:
    ```bash
-   npx --yes @mermaid-js/mermaid-cli -i library-model.mmd -o library-model.png -b white
+   npx --yes @mermaid-js/mermaid-cli -i library-model.mmd -o library-model.png -b white -w 1400
    ```
+   `direction LR` at the top of the diagram lays classes out left-to-right instead of top-to-bottom
+   — for a linear chain like this one it renders far more legibly on a 16:9 slide (wide and short,
+   instead of tall and narrow). `-w 1400` renders at a higher base resolution so text stays sharp
+   once scaled into a slide.
+
+### Before the class diagram: show `relationship-types.mmd`
+
+Before touching the library model, show the five relationship arrows side by side, on their own —
+`relationship-types.mmd` pairs each one with a class name straight out of Modules 1-2
+(`Order`/`Client`, `Portfolio`/`Instrument`, `Portfolio`/`Holding`, `BondInstrument`/`Instrument`,
+`Instrument`/`Feeable`), so the notation lands as "notation for OO ideas you already know", not as
+new content to memorise.
+
+Spend the most time on **aggregation vs. composition**, since it's the pair everyone mixes up:
+ask "if the whole is deleted, does the part still make sense on its own?" — an `Instrument` still
+exists in the market with no `Portfolio` pointing at it (aggregation, open diamond); a `Holding`
+means nothing without the `Portfolio` it belongs to (composition, filled diamond).
 
 ## Points to Make Explicitly
 

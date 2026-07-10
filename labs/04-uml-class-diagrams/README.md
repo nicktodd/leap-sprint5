@@ -26,6 +26,8 @@ By the end of this lab you will have:
    |---|---|
    | "X has a Y" (holds a reference) | `X --> Y` |
    | "X has many Y" | `X "1" --> "*" Y` |
+   | "X has a Y, and Y can exist without X" (aggregation) | `X o-- Y` |
+   | "X has a Y, and Y is meaningless without X" (composition) | `X *-- Y` |
    | "X uses Y, but doesn't hold onto it" | `X ..> Y` |
    | "X is a kind of Y" (inheritance) | `X --|> Y` |
    | "X implements the Y interface" | `Y` marked `<<interface>>`, edge `X ..|> Y` |
@@ -38,13 +40,20 @@ By the end of this lab you will have:
    you listed actually appear? Anything you had to leave out or simplify to make the diagram
    readable is worth a one-line note (add it as a comment at the top of the `.mmd` file).
 
-## A note on association vs. dependency
+## A note on association vs. dependency, and aggregation vs. composition
 
-This is the one genuinely new idea today (your Module 3 sketch didn't distinguish them). Ask, for
-each relationship: **does the class permanently hold a reference to the other** (association,
-`-->`), **or does it just use it briefly, e.g. as a method parameter** (dependency, `..>`)? Get
-this "wrong" and it's not a disaster — it's exactly the kind of thing Module 6's peer review will
-surface and discuss.
+These are the genuinely new ideas today (your Module 3 sketch didn't distinguish any of them).
+
+- **Association vs. dependency**: does the class permanently hold a reference to the other
+  (association, `-->`), or does it just use it briefly, e.g. as a method parameter (dependency,
+  `..>`)?
+- **Aggregation vs. composition**: for a "has a" relationship, ask "if I delete the whole, does
+  the part still make sense on its own?" If yes, it's aggregation (`o--`) — e.g. a `Portfolio`
+  references `Instrument`s that exist in the market regardless. If no, it's composition (`*--`) —
+  e.g. a `Holding` has no meaning outside the `Portfolio` it belongs to.
+
+Get any of these "wrong" and it's not a disaster — it's exactly the kind of thing Module 6's peer
+review will surface and discuss.
 
 ## Deliverable
 
@@ -54,7 +63,8 @@ directly if you view it in a markdown code fence — try embedding it in your ow
 ## Acceptance criteria
 
 - Every class from your Module 3 worksheet appears in the diagram
-- At least one association, one dependency, one inheritance, and one interface-realization edge
-  are used, each correctly (not all relationships lumped together as one arrow type)
+- At least one association, one aggregation or composition, one dependency, one inheritance, and
+  one interface-realization edge are used, each correctly (not all relationships lumped together
+  as one arrow type)
 - The diagram renders without errors via `mmdc`
 - A model answer is available in `../../solutions/04-uml-class-diagrams/` once you've had a go
