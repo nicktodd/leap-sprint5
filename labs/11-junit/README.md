@@ -62,3 +62,16 @@ A completed `RiskLimitCheckerTest.java`.
 - Every test (and nested class) has a `@DisplayName` that would make sense to someone who has
   never read the code
 - No test method is missing an assertion — every test actually checks something
+
+## A note on mocking
+
+You won't use Mockito in this lab — `RiskLimitChecker` takes only primitive parameters, so it has
+no collaborators to mock. That's a deliberate, genuine example: not every class needs a mock.
+See the demo (`MockitoAndHamcrestDemoTest.java`) for classes that *do* have collaborators worth
+isolating.
+
+If you finish early: `OrderExecutor` (copied into this project's demo, originally from Module 8)
+depends on both an `Instrument` and a `ReportWriter`. Try rewriting a test for it using
+`@Mock`/`when(...).thenReturn(...)`/`verify(...)` instead of the real `BondInstrument` and
+`InMemoryReportWriter` — and compare how confident you are that a red test means `OrderExecutor`
+itself is broken, versus one of its collaborators.
