@@ -34,6 +34,7 @@ self-contained Maven projects (`pom.xml` in each), runnable independently:
 | 1 | Core Java Refresher | [labs/01-core-java-refresher/README.md](labs/01-core-java-refresher/README.md) |
 | 2 | Object-Oriented Principles in Practice | [labs/02-oo-principles-in-practice/README.md](labs/02-oo-principles-in-practice/README.md) |
 | 3 | OOAD: From Requirements to Objects | [labs/03-ooad-from-requirements-to-objects/README.md](labs/03-ooad-from-requirements-to-objects/README.md) |
+| 4 | UML Class Diagrams | [labs/04-uml-class-diagrams/README.md](labs/04-uml-class-diagrams/README.md) |
 
 ## Getting started
 
