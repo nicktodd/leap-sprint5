@@ -41,6 +41,7 @@ self-contained Maven projects (`pom.xml` in each), runnable independently:
 | 8 | SOLID Principles Part 2 (I, D) | [labs/08-solid-principles-part2/README.md](labs/08-solid-principles-part2/README.md) |
 | 9 | Clean Code | [labs/09-clean-code/README.md](labs/09-clean-code/README.md) |
 | 10 | TDD Fundamentals | [labs/10-tdd-fundamentals/README.md](labs/10-tdd-fundamentals/README.md) |
+| 11 | JUnit | [labs/11-junit/README.md](labs/11-junit/README.md) |
 
 ## Getting started
 
