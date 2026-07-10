@@ -17,7 +17,10 @@ By the end of this lab you will have:
 
 ## Task
 
-1. Create `mission-order-sequence.mmd` in this folder.
+1. Create `mission-order-sequence.mmd` in this folder. Start it with
+   `%%{init: {'sequence': {'mirrorActors': false}}}%%` on its own line before `sequenceDiagram` —
+   this stops Mermaid repeating every participant box at the bottom of the diagram, which just adds
+   noise once the lifelines are long.
 2. Add one `participant` per object involved in processing an order. At minimum: `Client`,
    `Order`, `OrderValidator`, `OrderExecutor`, `Portfolio`, `Instrument`, `SettlementReport` — use
    your own Module 4 class names if they differ.
