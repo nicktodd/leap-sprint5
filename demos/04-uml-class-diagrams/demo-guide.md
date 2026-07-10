@@ -39,18 +39,27 @@ worksheet:
    instead of tall and narrow). `-w 1400` renders at a higher base resolution so text stays sharp
    once scaled into a slide.
 
-### Before the class diagram: show `relationship-types.mmd`
+### Before the class diagram: five relationships, five slides
 
-Before touching the library model, show the five relationship arrows side by side, on their own —
-`relationship-types.mmd` pairs each one with a class name straight out of Modules 1-2
-(`Order`/`Client`, `Portfolio`/`Instrument`, `Portfolio`/`Holding`, `BondInstrument`/`Instrument`,
-`Instrument`/`Feeable`), so the notation lands as "notation for OO ideas you already know", not as
-new content to memorise.
+Before touching the library model, the slide deck walks through the five relationship types one
+at a time, each as its own concrete example rendered from `relationships/*.mmd` — every example
+uses a class name straight out of Modules 1-2, so the notation lands as "notation for OO ideas you
+already know", not as new content to memorise:
+
+| Relationship | Example | File |
+|---|---|---|
+| Association | `Order --> Client` | `relationships/association.mmd` |
+| Aggregation | `Portfolio o-- Instrument` | `relationships/aggregation.mmd` |
+| Composition | `Portfolio *-- Holding` | `relationships/composition.mmd` |
+| Inheritance | `BondInstrument --|> Instrument` | `relationships/inheritance.mmd` |
+| Implements | `Instrument ..|> Feeable` | `relationships/implements.mmd` |
 
 Spend the most time on **aggregation vs. composition**, since it's the pair everyone mixes up:
 ask "if the whole is deleted, does the part still make sense on its own?" — an `Instrument` still
 exists in the market with no `Portfolio` pointing at it (aggregation, open diamond); a `Holding`
-means nothing without the `Portfolio` it belongs to (composition, filled diamond).
+means nothing without the `Portfolio` it belongs to (composition, filled diamond). The two example
+diagrams are deliberately near-identical in layout, differing only in the diamond — that's the
+whole point: the shape of the diamond is doing all the semantic work.
 
 ## Points to Make Explicitly
 
