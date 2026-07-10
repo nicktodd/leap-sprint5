@@ -44,6 +44,7 @@ self-contained Maven projects (`pom.xml` in each), runnable independently:
 | 11 | JUnit | [labs/11-junit/README.md](labs/11-junit/README.md) |
 | 12 | TDD in Practice | [labs/12-tdd-in-practice/README.md](labs/12-tdd-in-practice/README.md) |
 | 13 | Mission Build | [labs/13-mission-build/README.md](labs/13-mission-build/README.md) |
+| 14 | Sprint 5 Wrap-up & Design Rationale | [labs/14-sprint5-wrapup/README.md](labs/14-sprint5-wrapup/README.md) |
 
 ## Getting started
 
