@@ -36,6 +36,7 @@ self-contained Maven projects (`pom.xml` in each), runnable independently:
 | 3 | OOAD: From Requirements to Objects | [labs/03-ooad-from-requirements-to-objects/README.md](labs/03-ooad-from-requirements-to-objects/README.md) |
 | 4 | UML Class Diagrams | [labs/04-uml-class-diagrams/README.md](labs/04-uml-class-diagrams/README.md) |
 | 5 | UML Sequence Diagrams | [labs/05-uml-sequence-diagrams/README.md](labs/05-uml-sequence-diagrams/README.md) |
+| 6 | Peer Review | [labs/06-peer-review/README.md](labs/06-peer-review/README.md) |
 
 ## Getting started
 
