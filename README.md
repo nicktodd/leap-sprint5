@@ -39,6 +39,7 @@ self-contained Maven projects (`pom.xml` in each), runnable independently:
 | 6 | Peer Review | [labs/06-peer-review/README.md](labs/06-peer-review/README.md) |
 | 7 | SOLID Principles Part 1 (S, O, L) | [labs/07-solid-principles-part1/README.md](labs/07-solid-principles-part1/README.md) |
 | 8 | SOLID Principles Part 2 (I, D) | [labs/08-solid-principles-part2/README.md](labs/08-solid-principles-part2/README.md) |
+| 9 | Clean Code | [labs/09-clean-code/README.md](labs/09-clean-code/README.md) |
 
 ## Getting started
 
