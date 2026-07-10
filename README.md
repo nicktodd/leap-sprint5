@@ -43,6 +43,7 @@ self-contained Maven projects (`pom.xml` in each), runnable independently:
 | 10 | TDD Fundamentals | [labs/10-tdd-fundamentals/README.md](labs/10-tdd-fundamentals/README.md) |
 | 11 | JUnit | [labs/11-junit/README.md](labs/11-junit/README.md) |
 | 12 | TDD in Practice | [labs/12-tdd-in-practice/README.md](labs/12-tdd-in-practice/README.md) |
+| 13 | Mission Build | [labs/13-mission-build/README.md](labs/13-mission-build/README.md) |
 
 ## Getting started
 
