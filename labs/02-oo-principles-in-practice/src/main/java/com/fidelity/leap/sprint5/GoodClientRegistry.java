@@ -1,27 +1,24 @@
 package com.fidelity.leap.sprint5;
 
-// Kata C: the fix - composition, not inheritance. This class must NOT extend
-// ArrayList (or any other collection type). It should HAVE a list internally,
-// fully private, exposed only through the small, deliberate interface below.
-// TODO:
-// - addClient(String clientId): add the client ID; throw IllegalArgumentException
-//   if that ID is already present (no duplicates allowed - the rule
-//   BadClientRegistry couldn't enforce).
-// - contains(String clientId): return true if the ID is present.
-// - size(): return the number of registered clients.
+import java.util.ArrayList;
+import java.util.List;
+
 public class GoodClientRegistry {
 
-    // TODO: declare a private field here to hold the client IDs
+    private final List<String> clients = new ArrayList<>();
 
     public void addClient(String clientId) {
-        throw new UnsupportedOperationException("TODO: implement addClient");
+        if (clients.contains(clientId)) {
+            throw new IllegalArgumentException("Client already registered: " + clientId);
+        }
+        clients.add(clientId);
     }
 
     public boolean contains(String clientId) {
-        throw new UnsupportedOperationException("TODO: implement contains");
+        return clients.contains(clientId);
     }
 
     public int size() {
-        throw new UnsupportedOperationException("TODO: implement size");
+        return clients.size();
     }
 }

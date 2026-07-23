@@ -1,23 +1,28 @@
 package com.fidelity.leap.sprint5;
 
-// Kata A: mission-brief.md requirement 6 - every order processed, accepted or
-// rejected (and why), plus the fee for each accepted order. Format exactly:
-//   Settlement Report
-//   <clientId> <ticker>: ACCEPTED, fee $<fee>
-//   <clientId> <ticker>: REJECTED - <reason>
-//   ... one line per order, in the order recorded ...
-//   Total fees: $<sum of all accepted fees>
+import java.util.ArrayList;
+import java.util.List;
+
 public class SettlementReport {
 
+    private final List<String> lines = new ArrayList<>();
+    private double totalFees = 0;
+
     public void recordAccepted(String clientId, String ticker, double fee) {
-        throw new UnsupportedOperationException("TODO: implement recordAccepted");
+        lines.add(clientId + " " + ticker + ": ACCEPTED, fee $" + fee);
+        totalFees += fee;
     }
 
     public void recordRejected(String clientId, String ticker, String reason) {
-        throw new UnsupportedOperationException("TODO: implement recordRejected");
+        lines.add(clientId + " " + ticker + ": REJECTED - " + reason);
     }
 
     public String render() {
-        throw new UnsupportedOperationException("TODO: implement render");
+        StringBuilder sb = new StringBuilder("Settlement Report\n");
+        for (String line : lines) {
+            sb.append(line).append("\n");
+        }
+        sb.append("Total fees: $").append(totalFees);
+        return sb.toString();
     }
 }

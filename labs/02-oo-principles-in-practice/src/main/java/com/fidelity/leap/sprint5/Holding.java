@@ -1,25 +1,25 @@
 package com.fidelity.leap.sprint5;
 
-// Kata A: fix HoldingStarter's public-field problem here, properly.
-// TODO:
-// - quantity must be a PRIVATE field.
-// - Constructor: accept an initial quantity; throw IllegalArgumentException if it's negative.
-// - getQuantity(): return the current quantity.
-// - adjust(double delta): apply delta to quantity; throw IllegalArgumentException
-//   (without changing state) if the result would be negative.
 public class Holding {
 
-    // TODO: declare the field here (private!)
+    private double quantity;
 
     public Holding(double initialQuantity) {
-        throw new UnsupportedOperationException("TODO: implement constructor");
+        if (initialQuantity < 0) {
+            throw new IllegalArgumentException("Initial quantity cannot be negative: " + initialQuantity);
+        }
+        this.quantity = initialQuantity;
     }
 
     public double getQuantity() {
-        throw new UnsupportedOperationException("TODO: implement getQuantity");
+        return quantity;
     }
 
     public void adjust(double delta) {
-        throw new UnsupportedOperationException("TODO: implement adjust");
+        double result = quantity + delta;
+        if (result < 0) {
+            throw new IllegalArgumentException("Adjustment would result in negative quantity: " + result);
+        }
+        quantity = result;
     }
 }

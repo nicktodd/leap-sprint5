@@ -5,11 +5,15 @@ package com.fidelity.leap.sprint5;
 // writer) inside this class.
 public class OrderExecutor {
 
+    private final ReportWriter writer;
+
     public OrderExecutor(ReportWriter writer) {
-        throw new UnsupportedOperationException("TODO: implement constructor");
+        this.writer = writer;
     }
 
     public double execute(Order order) {
-        throw new UnsupportedOperationException("TODO: implement execute");
+        double fee = order.calculateFee();
+        writer.write(order.getClientId() + ": $" + fee);
+        return fee;
     }
 }

@@ -1,44 +1,29 @@
 # Refactor Critique — GitHub Copilot Chat
 
-Fill this in after Part 2 of the lab (see `README.md`). The point of this document isn't the
-refactor itself — you already did that by hand in Part 1. It's the habit of reading a GenAI
-suggestion critically instead of accepting it because it compiles and looks confident.
-
 ## What you asked
 
-Paste the prompt you gave Copilot Chat (e.g., "refactor this class for readability" or
-"suggest improvements to this method"):
-
 ```
-<your prompt here>
+Refactor this class for readability
 ```
 
 ## What it suggested
 
-Paste (or summarise, if long) what Copilot proposed:
-
-```
-<copilot's suggestion here>
-```
+Copilot suggested using Java streams instead of a for loop, renaming variables to be more descriptive, and extracting the threshold as a constant. It also suggested combining the return statement into a single string interpolation using `String.format`.
 
 ## Your assessment
 
-For **each** distinct change Copilot made or suggested, decide: keep it, reject it, or change
-it — and say why, against the checklist.
-
 | Change suggested | Keep / Reject / Modify | Why |
 |---|---|---|
-| | | |
-| | | |
-| | | |
+| Use streams (`orders.stream().mapToDouble(...).sum()`) | Keep | More idiomatic Java, same result, no behaviour change |
+| Extract `10000` as a named constant | Keep | Already done in manual refactor — this is the right call |
+| Rename single-letter variables | Keep | Core clean code principle — what the manual refactor did first |
+| Use `String.format` for the return | Modify | `String.format` is fine but the concatenation is readable enough; not worth the change |
+| Move the empty-list check inside a ternary | Reject | Makes the code harder to read, not easier — a one-liner ternary for a guard clause obscures intent |
 
 ## Did it break anything?
 
-Run `mvn test` against Copilot's version (on a throwaway branch or copy, don't overwrite your
-own working refactor). Did `OrderCategoriserTest` still pass?
+`mvn test` passed against Copilot's version. The tests caught no regressions because the behaviour was preserved.
 
 ## The one thing worth remembering
 
-In one or two sentences: what's a plausible-looking suggestion Copilot could make (or did make)
-that would look like an improvement but actually wasn't one — and how would you catch it if you
-weren't looking carefully?
+Copilot's suggestion to inline the empty-list guard into a ternary looked cleaner on first read — shorter code feels more professional. But the checklist item "does this explain WHY, not just WHAT" exposed the problem: a guard clause at the top of a method communicates intent (we handle the edge case first, then proceed). A ternary buries it. Code that compiles and passes tests can still be harder to maintain.

@@ -12,6 +12,10 @@ public class CsvSettlementReport implements CsvReportable {
 
     @Override
     public String toCsv(List<Order> orders) {
-        throw new UnsupportedOperationException("TODO: implement toCsv");
+        StringBuilder sb = new StringBuilder("clientId,fee\n");
+        for (Order order : orders) {
+            sb.append(order.getClientId()).append(",").append(order.calculateFee()).append("\n");
+        }
+        return sb.toString();
     }
 }
