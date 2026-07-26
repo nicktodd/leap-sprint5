@@ -1,7 +1,7 @@
-# Fidelity LEAP Program — Sprint 5 Lab Exercises
+# LEAP Program — Sprint 5 Lab Exercises
 
 This repository contains the hands-on lab exercises accompanying **Sprint 5: Software
-Engineering Essentials, Java & OOAD**, week 5 of the Fidelity LEAP graduate programme.
+Engineering Essentials, Java & OOAD**, week 5 of the LEAP graduate programme.
 
 ## Prerequisites
 
